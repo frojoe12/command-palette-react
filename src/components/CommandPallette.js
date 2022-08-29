@@ -20,12 +20,13 @@ const CommandPallette = () => {
         setSearchResults(newData)
     }
     const onChangeHandler = (ev) => {
-        clearTimeout(inputTimer)
+        if (inputTimer !== null) {clearTimeout(inputTimer)}
         setSearchValue(ev.target.value)
+        setSearchResults(['Searching...'])
         const newTimer = setTimeout(()=>{
             console.log('searching')
             searchFor(ev.target.value)
-        },1000)
+        },500)
         setInputTimer(newTimer)
         
            
