@@ -11,15 +11,24 @@ const CommandPallette = () => {
     const [isOpen, setIsOpen] = useState(false)
     const [searchValue, setSearchValue] = useState("")
     const [searchResults, setSearchResults] = useState([])
+    const [fetchedSearchData,setFetchedSearchData] = useState([])
+    const [inputTimer,setInputTimer] = useState(null)
 
     const searchFor = (value) => {
         if (value.length <1) {return}
-        const newData = searchData.filter(result=>result.toLowerCase().includes(value.toLowerCase()))
+        const newData = fetchedSearchData.filter(result=>result.toLowerCase().includes(value.toLowerCase()))
         setSearchResults(newData)
     }
     const onChangeHandler = (ev) => {
+        clearTimeout(inputTimer)
         setSearchValue(ev.target.value)
-        searchFor(ev.target.value)
+        const newTimer = setTimeout(()=>{
+            console.log('searching')
+            searchFor(ev.target.value)
+        },1000)
+        setInputTimer(newTimer)
+        
+           
     }
     const onKeyDown = (ev) => {
        if (ev.key==='k' && (ev.metaKey|| ev.ctrlKey)) {
@@ -36,6 +45,15 @@ const CommandPallette = () => {
         }
     },[])
     
+    useEffect(()=>{
+        // simulate fetching a lot of dummy data for testing useTransition hook
+        const simulateFetchData = searchData
+        for (let i = 1 ; i<=10000 ; i++) {
+            simulateFetchData.push(`Item no ${i}`)
+        }
+        setFetchedSearchData(simulateFetchData)
+    },[])
+
     return (
             <>
                 <Transition
